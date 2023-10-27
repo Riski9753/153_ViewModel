@@ -2,5 +2,7 @@
     <string name="app_name">DataForm</string>
     <string name="laki">laki-laki</string>
     <string name="wanita">perempuan</string>
+    <string name="belummenikah">belummenikah</string>
+    <string name="menikah">menikah</string>
     <string name="submit">submit</string>
 </resources>

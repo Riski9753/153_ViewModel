@@ -1,4 +1,4 @@
-package com.example.tugas3
+package com.example.dataform
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,7 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dataform.data.DataSource.jenis
-import com.example.tugas3.ui.theme.Tugas3Theme
+import com.example.dataform.data.DataSource.setatus
+import com.example.dataform.ui.theme.DataFormTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,6 +99,10 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
     var textAlamat by remember {
         mutableStateOf("")
     }
+    var textEmail by remember {
+        mutableStateOf("")
+    }
+
 
     val context = LocalContext.current
     val dataform: Dataform
@@ -124,6 +130,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             textTlp = it
         }
     )
+
     OutlinedTextField(
         value = textAlamat,
         singleLine = true,
@@ -138,10 +145,25 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         options = jenis.map { id -> context.resources.getString(id)},
         oneSelectionChanged = {cobaViewModel.setJenisK(it)}
     )
+    SelectJK(
+        options = setatus.map { id -> context.resources.getString(id)},
+        oneSelectionChanged = {cobaViewModel.setJenisK(it)}
+    )
+    OutlinedTextField(
+        value = textEmail,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Email") },
+        onValueChange = {
+            textEmail = it
+        }
+    )
+
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            cobaViewModel.insertData(textNama,textTlp, textAlamat, dataform.sex)
+            cobaViewModel.insertData(textNama,textTlp,textEmail, textAlamat,textEmail, dataform.sex)
         }
     ) {
         Text(
@@ -154,7 +176,9 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         namanya = cobaViewModel.namaUsr,
         telponnya = cobaViewModel.noTlp,
         alamatnya = cobaViewModel.alamatUsr,
-        jenisnya = cobaViewModel.jenisKl
+        jenisnya = cobaViewModel.jenisKl,
+        emailnya = cobaViewModel.textEmail,
+        setatusnya = cobaViewModel.setatusnya
     )
 }
 @Composable
@@ -174,8 +198,10 @@ fun TampilLayout(
         }
     }
 }
+
+
 @Composable
-fun TextHasil(namanya: String, telponnya: String, alamatnya: String, jenisnya: String) {
+fun TextHasil(namanya: String, telponnya: String, alamatnya: String, jenisnya: String, emailnya : String,setatusnya : String) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -203,6 +229,16 @@ fun TextHasil(namanya: String, telponnya: String, alamatnya: String, jenisnya: S
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         )
+        Text(
+            text = "Email : " + emailnya,
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "setatus : " + setatusnya,
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+        )
     }
 }
 @Composable
@@ -212,7 +248,7 @@ fun Greeting() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    Tugas3Theme {
+    DataFormTheme {
         TampilLayout()
     }
 }
